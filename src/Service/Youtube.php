@@ -61,7 +61,7 @@ class Youtube
             return false;
         }
 
-        $file = 'HWvLyHx-pmk.ogg'; //$process->getOutput();
+        $file = $process->getOutput();
         $this->minio->upload($file, "{$this->folder}/{$file}");
 
         return $this->check();
