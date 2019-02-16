@@ -1,0 +1,36 @@
+version: '3.7'
+
+x-variables: &x-variables
+  APP_ENV: dev
+  APP_SECRET: c95ab68cbfba3232e79d72ebae567424
+  MINIO_ENDPOINT: http://172.24.0.3:9000
+  MINIO_ACCESS_KEY: medley
+  MINIO_BUCKET: medley
+  MINIO_SECRET_KEY: h15QXfIaJVdcTQdqTQm6pYwYjFa7x87TfhF47CPf
+
+services:
+  app:
+    image: medley/selfhosted-agent
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment: *x-variables
+    volumes:
+     - ./bin:/app/bin
+     - ./src:/app/src
+    ports:
+     - "8000:8000"
+    hostname: app
+
+  minio:
+    image: minio/minio
+    hostname: minio
+    environment: *x-variables
+    volumes:
+     - minio-data:/data
+    ports:
+     - "9000:9000"
+    command: server /data
+
+volumes:
+  minio-data:
