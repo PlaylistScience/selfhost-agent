@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <audio autoplay="autoplay" controls="controls">
+        <p>Your browser does not support the audio element.</p>
+        <source src="{{ url }}" />
+    </audio>
+{% endblock %}

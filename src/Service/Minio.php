@@ -41,6 +41,9 @@ class Minio
                 'key'    => $key,
                 'secret' => $secret,
             ],
+            'http'    => [
+                'connect_timeout' => 5
+            ]
         ]);
 
         $this->adapter = new AwsS3Adapter($this->client, $bucket, '');

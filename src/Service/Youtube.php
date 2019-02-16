@@ -17,9 +17,16 @@ class Youtube
         $this->minio = $minio;
     }
 
-    public function setId($id)
+    public function setUrl($url)
     {
-        $this->id = $id;
+        parse_str(parse_url($url, PHP_URL_QUERY), $params);
+        print_r($params);
+
+        if (!array_key_exists('v', $params)) {
+            throw new \Exception("Unable to find video id in link", 1);
+        }
+
+        $this->id = $params['v'];
 
         return $this;
     }
@@ -36,11 +43,7 @@ class Youtube
             return $path;
         }
 
-        $process = new Process(
-            "/app/bin/youtube-download {$this->getId()}"
-        );
-        $process->run();
-
+        $process = (new Process("/app/bin/youtube-download {$this->getId()}"))->run();
         if (!$process->isSuccessful()) {
             return false;
         }

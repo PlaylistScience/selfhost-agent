@@ -128,6 +128,9 @@
             "ref": "dc3fc2e0334a4137c47cfd5a3ececc601fa61a0b"
         }
     },
+    "symfony/form": {
+        "version": "v4.2.3"
+    },
     "symfony/framework-bundle": {
         "version": "4.2",
         "recipe": {
@@ -143,6 +146,12 @@
     "symfony/http-kernel": {
         "version": "v4.2.3"
     },
+    "symfony/inflector": {
+        "version": "v4.2.3"
+    },
+    "symfony/intl": {
+        "version": "v4.2.3"
+    },
     "symfony/maker-bundle": {
         "version": "1.0",
         "recipe": {
@@ -151,6 +160,12 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
+    },
+    "symfony/options-resolver": {
+        "version": "v4.2.3"
+    },
+    "symfony/polyfill-intl-icu": {
+        "version": "v1.10.0"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.10.0"
@@ -161,6 +176,9 @@
     "symfony/process": {
         "version": "v4.2.3"
     },
+    "symfony/property-access": {
+        "version": "v4.2.3"
+    },
     "symfony/routing": {
         "version": "4.2",
         "recipe": {
@@ -168,6 +186,27 @@
             "branch": "master",
             "version": "4.2",
             "ref": "5374e24d508ba8fd6ba9eb15170255fdb778316a"
+        }
+    },
+    "symfony/twig-bridge": {
+        "version": "v4.2.3"
+    },
+    "symfony/twig-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "369b5b29dc52b2c190002825ae7ec24ab6f962dd"
+        }
+    },
+    "symfony/validator": {
+        "version": "4.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.1",
+            "ref": "0cdc982334f45d554957a6167e030482795bf9d7"
         }
     },
     "symfony/var-dumper": {
@@ -187,5 +226,8 @@
     },
     "symfony/yaml": {
         "version": "v4.2.3"
+    },
+    "twig/twig": {
+        "version": "v2.6.2"
     }
 }
