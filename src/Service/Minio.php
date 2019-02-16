@@ -28,7 +28,7 @@ class Minio
      * Temporary storage location for downloads
      * @var string
      */
-    private $path = '/app/var/tmp/';
+    private $path = '/var/www/var/tmp/';
 
     public function __construct($endpoint, $key, $bucket, $secret)
     {
@@ -64,5 +64,10 @@ class Minio
         unlink("{$this->path}{$file}");
 
         return true;
+    }
+
+    public function stream($path)
+    {
+        return $this->filesystem->readStream($path);
     }
 }

@@ -19,6 +19,13 @@ class Youtube
 
     public function setUrl($url)
     {
+        $this->setId($this->getIdFromUrl($url));
+
+        return $this;
+    }
+
+    public function getIdFromUrl($url)
+    {
         parse_str(parse_url($url, PHP_URL_QUERY), $params);
         print_r($params);
 
@@ -26,7 +33,12 @@ class Youtube
             throw new \Exception("Unable to find video id in link", 1);
         }
 
-        $this->id = $params['v'];
+        return $params['v'];
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }
@@ -43,15 +55,26 @@ class Youtube
             return $path;
         }
 
-        $process = (new Process("/app/bin/youtube-download {$this->getId()}"))->run();
+        $process = new Process("/var/www/bin/youtube-download {$this->getId()}");
+        $process->run();
         if (!$process->isSuccessful()) {
             return false;
         }
 
-        $file = $process->getOutput();
+        $file = 'HWvLyHx-pmk.ogg'; //$process->getOutput();
         $this->minio->upload($file, "{$this->folder}/{$file}");
 
         return $this->check();
+    }
+
+    public function stream()
+    {
+        $path = $this->check();
+        if (false === $path) {
+            return false;
+        }
+
+        return $this->minio->stream($path);
     }
 
     private function check()
@@ -59,8 +82,9 @@ class Youtube
         $extensions = ['opus', 'ogg'];
         $path = "{$this->folder}/{$this->getId()}";
         foreach ($extensions as $extension) {
-            if ($this->minio->has("${path}.{$extension}")) {
-                return true;
+            $check = "${path}.{$extension}";
+            if ($this->minio->has($check)) {
+                return $check;
             }
         }
 

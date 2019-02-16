@@ -6,20 +6,21 @@ COPY src/ /app/src
 
 RUN composer install -vvv -o -a --no-scripts --ignore-platform-reqs
 
-FROM xigen/php:cli-73
+FROM xigen/php:fpm-73
+
 
 ENV APP_ENV dev
 
-WORKDIR /app
-
 RUN apk add --update --no-cache ca-certificates curl ffmpeg python gnupg py-pip \
-  && pip install -U youtube-dl 
+  && pip install -U youtube-dl
 
-COPY . /app
-COPY --from=composer /app/vendor /app/vendor
 
-RUN chmod +x /app/bin/console \
-  && mkdir /app/var/tmp \
-  && chmod 665 /app/var/tmp
+COPY . /var/www
+COPY --from=composer /app/vendor /var/www/vendor
 
-ENTRYPOINT ["php", "bin/console", "server:run", "0.0.0.0:8000"]
+RUN chmod +x /var/www/bin/console \
+  && mkdir /var/www/var/tmp \
+  && chmod 777 /var/www/var/tmp \
+  && chown -Rf 82:82 /var/www
+
+USER 82

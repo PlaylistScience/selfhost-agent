@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "58d0b4110ded1e63190f24a3389541bc",
+    "content-hash": "99b7bb466f796a25b071a6ed876b3e3d",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -87,6 +87,48 @@
                 "sdk"
             ],
             "time": "2019-02-15T19:08:26+00:00"
+        },
+        {
+            "name": "daverandom/resume",
+            "version": "v0.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DaveRandom/Resume.git",
+                "reference": "3d1c11b6c4315dd8d25d6f567c5ea392c7c60edb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DaveRandom/Resume/zipball/3d1c11b6c4315dd8d25d6f567c5ea392c7c60edb",
+                "reference": "3d1c11b6c4315dd8d25d6f567c5ea392c7c60edb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DaveRandom\\Resume\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "mit"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Wright",
+                    "email": "me@daverandom.com"
+                }
+            ],
+            "description": "Tiny library to facilitate resumable downloads",
+            "time": "2018-01-28T03:18:55+00:00"
         },
         {
             "name": "doctrine/annotations",

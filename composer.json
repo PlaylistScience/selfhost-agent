@@ -5,6 +5,7 @@
         "php": "^7.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "daverandom/resume": "^0.0.3",
         "league/flysystem-aws-s3-v3": "^1.0",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/console": "4.2.*",

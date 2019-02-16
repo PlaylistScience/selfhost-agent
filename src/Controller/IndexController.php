@@ -5,9 +5,14 @@ namespace App\Controller;
 use App\Service\Youtube;
 use App\Form\YoutubeLinkType;
 
+use DaveRandom\Resume\{DefaultOutputWriter, RangeSet, ResourceServlet, InvalidRangeHeaderException, UnsatisfiableRangeException, NonExistentFileException, UnreadableFileException, SendFileFailureException};
+
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class IndexController extends AbstractController
 {
@@ -20,8 +25,8 @@ class IndexController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $url = $form->getData()['url'];
-            $import = $youtube->setUrl($url)->import();
+            $data = $form->getData();
+            $import = $youtube->setUrl($data['url'])->import();
 
             return $this->redirectToRoute('playYoutube', ['id' => $youtube->getId()]);
         }
@@ -36,10 +41,77 @@ class IndexController extends AbstractController
      */
     public function playYoutube($id, Request $request, Youtube $youtube)
     {
-        $url = 'http://localhost:9000/medley/youtube/F2qISnvhoAg.ogg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=medley%2F20190216%2F%2Fs3%2Faws4_request&X-Amz-Date=20190216T192119Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=04d761f1c1cf7090f12c3172b3a86991e35678d02ce8d5b7a1b02b8c05b38b22';
+        $url = $this->generateUrl('streamYoutube', [
+            'id' => $id
+        ]);
 
         return $this->render('youtube-play.html.twig', [
            'url' => $url
         ]);
+    }
+
+    private function sendStreamHeaders($rangeSet = null)
+    {
+        $stat = fstat($this->resource);
+        $size = $stat['size'];
+        $headers = [
+            'content-type' => get_resource_type($this->resource),
+            'content-length' => $size,
+
+        ];
+
+        if (null !== $rangeSet) {
+            $headers['accept-ranges'] = 'bytes';
+        }
+
+        foreach ($headers as $key => $value) {
+            header("{$key}: {$value}");
+        }
+    }
+
+    /**
+     * @Route("/stream/youtube/{id}", name="streamYoutube")
+     */
+    public function streamYoutube($id, Request $request, Youtube $youtube)
+    {
+        $this->resource = $youtube->setId($id)->stream();
+        $outputWriter = new DefaultOutputWriter();
+        $rangeSet = RangeSet::createFromHeader('bytes=0-');
+
+        if ($rangeSet === null) {
+            // No ranges requested, just send the whole file
+            $outputWriter->setResponseCode(200);
+            $this->sendStreamHeaders();
+            echo stream_get_contents($this->resource);
+
+            return;
+        }
+
+        // Send the requested ranges
+        $stat = fstat($this->resource);
+        $size = $stat['size'];
+        $ranges = $rangeSet->getRangesForSize($size);
+        $contentRange = $this->getContentRangeHeader($rangeSet->getUnit(), $ranges, $size);
+
+        $outputWriter->setResponseCode(206);
+        $outputWriter->sendHeader('Content-Range', $contentRange);
+        $this->sendStreamHeaders($rangeSet);
+
+        foreach ($rangeSet->getRangesForSize($size) as $range) {
+            echo stream_get_contents($this->resource, $range->getLength(), $range->getStart());
+        }
+    }
+
+    /**
+     * Create a Content-Range header corresponding to the specified unit and ranges
+     *
+     * @param string $unit
+     * @param Range[] $ranges
+     * @param int $size
+     * @return string
+     */
+    public function getContentRangeHeader(string $unit, array $ranges, int $size): string
+    {
+        return $unit . ' ' . \implode(',', $ranges) . '/' . $size;
     }
 }
