@@ -4,6 +4,6 @@ cd /var/www/var/tmp
 
 rm -rf /var/www/var/tmp/${1}.*
 
-youtube-dl -v -o "%(id)s.%(ext)s" -x ${1}
+youtube-dl -q -o "%(id)s.%(ext)s" -x ${1}
 
 ls | sort -n | head -1

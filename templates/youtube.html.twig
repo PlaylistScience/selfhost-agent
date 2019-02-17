@@ -1,4 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
 {{ form_start(form) }}
 {{ form_widget(form.url) }}
 {{ form_widget(form.import) }}
 {{ form_end(form) }}
+{% endblock %}

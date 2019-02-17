@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Imported Youtube</h1>
+<ul>
+    {% for link in youtube %}
+    <li>
+        <a href="{{ path('playYoutube', {'id': link.filename}) }}">{{ link.filename }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="{{ path('importYoutube') }}"><h2>Import New</h2></a>
+<hr/>
+
+{% endblock %}

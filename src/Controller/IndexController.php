@@ -16,6 +16,20 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class IndexController extends AbstractController
 {
+    public function __construct(Youtube $youtube)
+    {
+        $this->youtube = $youtube;
+    }
+    /**
+     * @Route("/", name="index")
+     */
+    public function index(Request $request)
+    {
+        return $this->render('index.html.twig', [
+           'youtube' => $this->youtube->fetchAll(),
+        ]);
+    }
+
     /**
      * @Route("/import/youtube", name="importYoutube")
      */
@@ -26,9 +40,9 @@ class IndexController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $import = $youtube->setUrl($data['url'])->import();
+            $import = $this->youtube->setUrl($data['url'])->import();
 
-            return $this->redirectToRoute('playYoutube', ['id' => $youtube->getId()]);
+            return $this->redirectToRoute('playYoutube', ['id' => $this->youtube->getId()]);
         }
 
         return $this->render('youtube.html.twig', [
@@ -39,7 +53,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/play/youtube/{id}", name="playYoutube")
      */
-    public function playYoutube($id, Request $request, Youtube $youtube)
+    public function playYoutube($id, Request $request)
     {
         $url = $this->generateUrl('streamYoutube', [
             'id' => $id
@@ -72,9 +86,9 @@ class IndexController extends AbstractController
     /**
      * @Route("/stream/youtube/{id}", name="streamYoutube")
      */
-    public function streamYoutube($id, Request $request, Youtube $youtube)
+    public function streamYoutube($id, Request $request)
     {
-        $this->resource = $youtube->setId($id)->stream();
+        $this->resource = $this->youtube->setId($id)->stream();
         $outputWriter = new DefaultOutputWriter();
         $rangeSet = RangeSet::createFromHeader('bytes=0-');
 

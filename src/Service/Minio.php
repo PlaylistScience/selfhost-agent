@@ -55,6 +55,11 @@ class Minio
         return $this->filesystem->has($path);
     }
 
+    public function listContents($path, $recursive = false)
+    {
+        return $this->filesystem->listContents($path, $recursive);
+    }
+
     public function upload($file, $dest)
     {
         $file = trim(preg_replace('/\s+/', ' ', $file));

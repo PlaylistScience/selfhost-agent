@@ -77,6 +77,11 @@ class Youtube
         return $this->minio->stream($path);
     }
 
+    public function fetchAll()
+    {
+        return $this->minio->listContents($this->folder, true);
+    }
+
     private function check()
     {
         $extensions = ['opus', 'ogg'];
