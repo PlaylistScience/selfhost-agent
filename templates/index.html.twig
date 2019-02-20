@@ -13,4 +13,16 @@
 <a href="{{ path('importYoutube') }}"><h2>Import New</h2></a>
 <hr/>
 
+<h1>Imported Soundcloud</h1>
+<ul>
+    {% for link in soundcloud %}
+    <li>
+        <a href="{{ path('playSoundcloud', {'id': link.filename}) }}">{{ link.filename }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="{{ path('importSoundcloud') }}"><h2>Import New</h2></a>
+<hr/>
+
 {% endblock %}
