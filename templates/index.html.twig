@@ -5,7 +5,7 @@
 <ul>
     {% for link in youtube %}
     <li>
-        <a href="{{ path('playYoutube', {'id': link.filename}) }}">{{ link.filename }}</a>
+        <a href="{{ path('playYoutube', {'id': link.filename}) }}">{{ link.filename }}</a> <button data-clipboard-text="{{ app.request.getSchemeAndHttpHost() }}{{ path('streamYoutube', {'id': link.filename}) }}">stream</button>
     </li>
     {% endfor %}
 </ul>
@@ -17,12 +17,11 @@
 <ul>
     {% for link in soundcloud %}
     <li>
-        <a href="{{ path('playSoundcloud', {'id': link.filename}) }}">{{ link.filename }}</a>
+        <a href="{{ path('playSoundcloud', {'id': link.filename}) }}">{{ link.filename }}</a> <button data-clipboard-text="{{ app.request.getSchemeAndHttpHost() }}{{ path('streamSoundcloud', {'filename': link.filename}) }}">stream</button>
     </li>
     {% endfor %}
 </ul>
 
 <a href="{{ path('importSoundcloud') }}"><h2>Import New</h2></a>
 <hr/>
-
 {% endblock %}

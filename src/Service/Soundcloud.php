@@ -45,11 +45,11 @@ class Soundcloud
         $file = $process->getOutput();
         $this->minio->upload($file, "{$this->folder}/{$file}");
 
+        return str_replace('.mp3', '', $file);
+
         if (false === $this->check()) {
             return false;
         }
-
-        return $file;
     }
 
     public function stream($filename)

@@ -63,7 +63,7 @@ class IndexController extends AbstractController
             $data = $form->getData();
             $import = $this->soundcloud->setUrl($data['url'])->import();
 
-            return $this->redirectToRoute('playSoundcloud', ['filename' => $this->youtube->getId()]);
+            return $this->redirectToRoute('playSoundcloud', ['id' => $import]);
         }
 
         return $this->render('soundcloud.html.twig', [
