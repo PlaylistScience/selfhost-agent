@@ -19,13 +19,19 @@ class Youtube
 
     public function setUrl($url)
     {
-        $this->setId($this->getIdFromUrl($url));
+        $id = $this->getIdFromUrl($url);
+        $this->setId($id);
 
         return $this;
     }
 
     public function getIdFromUrl($url)
     {
+        preg_match('/[a-zA-Z0-9\-_]{11}/m', $url, $match);
+	if ([] !== $match && 1 === count($match)) {
+            return $match[0];
+        }
+        
         parse_str(parse_url($url, PHP_URL_QUERY), $params);
         print_r($params);
 
