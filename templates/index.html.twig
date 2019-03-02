@@ -5,7 +5,9 @@
 <ul>
     {% for link in youtube %}
     <li>
-        <a href="{{ path('playYoutube', {'id': link.filename}) }}">{{ link.filename }}</a> <button data-clipboard-text="{{ app.request.getSchemeAndHttpHost() }}{{ path('streamYoutube', {'id': link.filename}) }}">stream</button>
+        <a href="{{ path('playYoutube', {'id': link.filename}) }}">{{ link.filename }}</a>
+        <button data-clipboard-text="{{ app.request.getSchemeAndHttpHost() }}{{ path('streamYoutube', {'id': link.filename}) }}">stream</button>
+        <a href="vlc-x-callback://x-callback-url/stream?url={{ app.request.getSchemeAndHttpHost() }}{{ path('streamYoutube', {'id': link.filename}) }}"><button>vlc</button></a>
     </li>
     {% endfor %}
 </ul>
